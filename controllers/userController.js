@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const { generateToken } = require("../services/auth");
 
 const getAllUsers = async (req, res) => {
     const users = await User.find({});
@@ -30,14 +31,25 @@ const createUser = async (req, res) => {
         lastName: req.body.lastName,
         email: req.body.email,
         gender: req.body.gender,
+        password: req.body.password,
     });
     res.status(201).json({ msg: "User created successfully.", data: user })
 }
+
+const loginUser = async (req, res) => {
+    const user = await User.findOne({ email: req.body.email, password: req.body.password });
+    if (!user)
+        res.status(400).json({ msg: "Invalid username or password" });
+    const token = generateToken(user);
+    res.status(201).json({ Name: user.firstName, email: user.email, token: token })
+}
+
 
 module.exports = {
     createUser,
     getAllUsers,
     getUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    loginUser
 }

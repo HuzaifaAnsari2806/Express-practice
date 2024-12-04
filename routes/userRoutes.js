@@ -1,9 +1,11 @@
 const express = require('express');
-const { createUser, getUser, updateUser, deleteUser, getAllUsers } = require('../controllers/userController');
+const { createUser, getUser, updateUser, deleteUser, getAllUsers, loginUser } = require('../controllers/userController');
+const { verifyToken } = require("../middlewares/auth");
+
 const router = express.Router();
 
 router.route("/")
-    .get(getAllUsers)
+    .get(verifyToken, getAllUsers)
     .post(createUser);
 
 // app.get("/api/users/:id", (req, res) => {
@@ -13,8 +15,11 @@ router.route("/")
 // });
 
 router.route("/:id")
-    .get(getUser)
+    .get(verifyToken, getUser)
     .put(updateUser)
     .delete(deleteUser);
+
+router.route("/login")
+    .post(loginUser,);
 
 module.exports = router;
