@@ -20,6 +20,6 @@ router.route("/:id")
     .delete(deleteUser);
 
 router.route("/login")
-    .post(loginUser,);
+    .post(loginUser);
 
 module.exports = router;
